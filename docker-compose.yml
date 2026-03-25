@@ -52,6 +52,7 @@ services:
       - ./asterisk2/asterisk.conf:/etc/asterisk/asterisk.conf
       - ./asterisk2/extensions.conf:/etc/asterisk/extensions.conf
       - ./asterisk2/modules.conf:/etc/asterisk/modules.conf
+      - ./asterisk2/pjsip.conf:/etc/asterisk/pjsip.conf
       - ./asterisk2/manager.conf:/etc/asterisk/manager.conf
     networks:
       - voip-net
