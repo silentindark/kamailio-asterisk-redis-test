@@ -1,0 +1,43 @@
+[global]
+type = global
+user_agent = pbx_voice
+
+[transport-udp]
+type=transport
+protocol=udp
+protocol=udp
+bind=0.0.0.0:5061
+;local_net=10.4.0.18
+external_media_address=192.168.100.127
+external_signaling_address=192.168.100.127
+
+
+[101.test.local]
+type=endpoint
+transport=transport-udp
+context=from-internal
+disallow=all
+allow=alaw
+aors=101.test.local
+direct_media=no
+force_rport=no
+
+[101.test.local]
+type = aor
+contact = sip:101.test.local@192.168.100.127:5060
+qualify_frequency = 0
+
+[102.test.local]
+type=endpoint
+transport=transport-udp
+context=from-internal
+disallow=all
+allow=alaw
+aors=102.test.local
+direct_media=no
+force_rport=no
+
+[102.test.local]
+type = aor
+contact = sip:102.test.local@192.168.100.127:5060
+qualify_frequency = 0

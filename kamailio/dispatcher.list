@@ -1,2 +1,2 @@
-1 sip:asterisk1.kamailio-asterisk-redis-test_voip-net:5060 0 0
-1 sip:asterisk2.kamailio-asterisk-redis-test_voip-net:5060 0 0
+1 sip:192.168.100.127:5061 0 0
+1 sip:192.168.100.127:5062 0 0

@@ -8,13 +8,14 @@ REDIS_SERVER = 'redis'
 r = redis.Redis(host=REDIS_SERVER, port=6379, decode_responses=True)
 
 AMI_HOST = os.getenv('ASTERISK_SERVER', '127.0.0.1')
+AMI_PORT = int(os.getenv('ASTERISK_PORT', 5038))
 AMI_USER = os.getenv('ASTERISK_USER', 'admin')
 AMI_PASS = os.getenv('ASTERISK_PASS', 'admin')
 
 # Variables
 manager = Manager(
     host=AMI_HOST,
-    port=5038,
+    port=AMI_PORT,
     username=AMI_USER,
     secret=AMI_PASS,
     ping_delay=10,  # Delay after start
@@ -102,7 +103,7 @@ async def update_device_state(tenant, extension, *, state=None, registered=None)
         else:
             data = {
                 "name": extension,
-                "state": "UNKNOWN",
+                "state": "UNAVAILABLE",
                 "registered": "no"
             }
 
@@ -144,7 +145,7 @@ async def sync_states_from_redis():
                     data = json.loads(value)
                     extension = key.split(":")[3]
                     tenant = key.split(":")[1]
-                    state = data.get("state", "UNKNOWN")
+                    state = data.get("state", "UNAVAILABLE")
                     asyncio.create_task(ami_send(tenant, extension, state))
 
                 except Exception as e:
@@ -182,7 +183,7 @@ async def process_event(msg):
             elif msg['channel'] == 'voice_cache:peerstate-changes':
                 new_state = data['new_state']
 
-                if data["asterisk_id"] != os.environ['ASTERISK_SERVER']:
+                if data["asterisk_id"] != os.environ['POD_NAME']:
                     await update_device_state(
                         tenant,
                         ext,
